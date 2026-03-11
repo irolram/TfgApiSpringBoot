@@ -19,4 +19,8 @@ class UsuarioController(private val usuarioRepository: IUsuarioRepository) {
     fun obtenerUsuario(@PathVariable id: String): Usuario? {
         return usuarioRepository.findById(id).orElse(null)
     }
+    @GetMapping 
+    fun listarUsuarios(): List<Usuario> {
+        return usuarioRepository.findAll()
+    }
 }
