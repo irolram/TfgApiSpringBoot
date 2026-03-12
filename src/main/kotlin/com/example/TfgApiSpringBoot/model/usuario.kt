@@ -14,5 +14,5 @@ data class Usuario(
     val email: String,
 
     @Column(name = "rol")
-    val rol: String = "USER"
+    val rol: String = "USUARIO"
 )
