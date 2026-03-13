@@ -13,6 +13,6 @@ data class Usuario(
     val apellidos: String,
     val email: String,
 
-    @Column(name = "rol")
-    val rol: String = "USUARIO"
+    @Enumerated(EnumType.STRING)
+    val rol: Rol
 )

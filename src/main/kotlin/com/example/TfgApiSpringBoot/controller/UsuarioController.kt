@@ -2,12 +2,12 @@ package com.example.TfgApiSpringBoot.controller
 
 
 import com.example.TfgApiSpringBoot.model.Usuario
-import com.example.TfgApiSpringBoot.repository.IUsuarioRepository
+import com.example.TfgApiSpringBoot.repository.UsuarioRepository
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/usuarios") // Esta es la ruta base
-class UsuarioController(private val usuarioRepository: IUsuarioRepository) {
+class UsuarioController(private val usuarioRepository: UsuarioRepository) {
 
     @PostMapping // Esto responde al @POST de tu Retrofit en Android
     fun registrarUsuario(@RequestBody usuario: Usuario): Usuario {
