@@ -14,5 +14,5 @@ data class Usuario(
     val email: String,
 
     @Enumerated(EnumType.STRING)
-    val rol: Rol
+    val rol: Rol = Rol.USUARIO
 )

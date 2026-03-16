@@ -17,13 +17,16 @@ class AuthController(private val jwtUtil: JwtUtil, private val usuarioService: U
 
     @PostMapping("/login-app")
     fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<Any> {
-        // El servicio se encarga de todo: si no existe, lo crea; si existe, lo trae.
         val usuario = usuarioService.asegurarUsuario(loginRequest.userId, loginRequest.email)
 
-        // Generamos los tokens con los datos reales de la DB
-        val token = jwtUtil.generateToken(usuario.id, usuario.rol.name)
+        // 🔌 Aseguramos que el nombre del rol no sea nulo ni vacío
+        val nombreRol = usuario.rol?.name ?: "USER"
+
+        // Generamos los tokens con el rol asegurado
+        val token = jwtUtil.generateToken(usuario.id, nombreRol)
         val refresh = jwtUtil.generateRefreshToken(usuario.id)
 
-        return ResponseEntity.ok(AuthResponse(token, refresh, usuario.id, usuario.rol.name))
+        // Devolvemos la respuesta con el rol asegurado
+        return ResponseEntity.ok(AuthResponse(token, refresh, usuario.id, nombreRol))
     }
 }
