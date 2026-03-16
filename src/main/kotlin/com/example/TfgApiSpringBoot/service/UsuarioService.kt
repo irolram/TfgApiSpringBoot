@@ -37,7 +37,7 @@ class UsuarioService(private val usuarioRepository: UsuarioRepository) {
                 email = email,
                 nombre = "Usuario",
                 apellidos = "EcoDrop",
-                rol = Rol.USUARIO
+                rol = Rol.USER
             )
             usuarioRepository.save(nuevo)
         }
