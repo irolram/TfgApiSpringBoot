@@ -10,7 +10,7 @@ import java.util.*
 class JwtUtil {
     @Value("\${JWT_SECRET}")
     private lateinit var secretKey: String
-    private val expirationTime = 1600000L // 1 hora
+    private val expirationTime = 3600L
 
     fun generateToken(userId: String, rol: String): String {
         val claims = mapOf("rol" to rol)

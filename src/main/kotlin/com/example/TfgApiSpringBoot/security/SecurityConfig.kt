@@ -22,9 +22,9 @@ class SecurityConfig(private val jwtAuthenticationFilter:  JwtAuthenticationFilt
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
             .authorizeHttpRequests { auth ->
-                // Permitimos el acceso libre al Login y Registro
                 auth.requestMatchers("/api/auth/**").permitAll()
-                    // El resto de la API requiere estar autenticado
+                    // 🔌 AÑADE ESTA LÍNEA PARA VER LOS ERRORES REALES
+                    .requestMatchers("/error").permitAll()
                     .anyRequest().authenticated()
             }
             // Añadimos nuestro filtro personalizado antes del filtro por defecto de Spring

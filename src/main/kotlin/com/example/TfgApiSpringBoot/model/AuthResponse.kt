@@ -5,5 +5,5 @@ data class AuthResponse(
     val refreshToken: String,
     val userId: String,
     val role: String,
-    val expiresIn: Long = 3600 // 1 hora
+    val expiresIn: Long = 3600
 )
