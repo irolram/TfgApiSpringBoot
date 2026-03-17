@@ -2,26 +2,26 @@ package com.example.TfgApiSpringBoot.service
 
 import com.example.TfgApiSpringBoot.model.Rol
 import com.example.TfgApiSpringBoot.model.UsuarioEntity
-import com.example.TfgApiSpringBoot.repository.UsuarioRepository
+import com.example.TfgApiSpringBoot.repository.IUsuarioRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UsuarioService(private val usuarioRepository: UsuarioRepository) {
+class UsuarioService(private val IUsuarioRepository: IUsuarioRepository) {
 
     // Buscar por ID (UID de Firebase)
     fun obtenerPorId(id: String): UsuarioEntity? {
-        return usuarioRepository.findById(id).orElse(null)
+        return IUsuarioRepository.findById(id).orElse(null)
     }
 
     // Buscar por Email (usando el nuevo método del Repo)
     fun obtenerPorEmail(email: String): UsuarioEntity? {
-        return usuarioRepository.findByEmail(email).orElse(null)
+        return IUsuarioRepository.findByEmail(email).orElse(null)
     }
 
     // Verificar si el email existe antes de registrar
     fun existeEmail(email: String): Boolean {
-        return usuarioRepository.existsByEmail(email)
+        return IUsuarioRepository.existsByEmail(email)
     }
 
     // El método de "Auto-registro" que vimos antes
@@ -39,7 +39,7 @@ class UsuarioService(private val usuarioRepository: UsuarioRepository) {
                 apellidos = "EcoDrop",
                 rol = Rol.USER
             )
-            usuarioRepository.save(nuevo)
+            IUsuarioRepository.save(nuevo)
         }
     }
 }

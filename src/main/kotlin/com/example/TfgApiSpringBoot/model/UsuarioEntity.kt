@@ -2,6 +2,8 @@ package com.example.TfgApiSpringBoot.model
 
 import jakarta.persistence.*
 
+
+
 @Entity
 @Table(name = "usuarios")
 class UsuarioEntity(

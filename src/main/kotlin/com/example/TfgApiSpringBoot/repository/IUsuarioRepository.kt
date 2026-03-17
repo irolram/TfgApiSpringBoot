@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository
 import java.util.Optional
 
 @Repository
-interface UsuarioRepository : JpaRepository<UsuarioEntity, String> {
+interface IUsuarioRepository : JpaRepository<UsuarioEntity, String> {
 
     // 1. Buscar por email (útil para validaciones de registro)
     fun findByEmail(email: String): Optional<UsuarioEntity>
