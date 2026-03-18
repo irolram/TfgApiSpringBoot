@@ -53,4 +53,17 @@ class HuertoController(private val huertoRepository: HuertoRepository) {
         fechaCreacion = entity.fechaCreacion,
         creadorId = entity.creadorId
     )
+
+    @DeleteMapping("/{id}")
+    fun borrarHuerto(@PathVariable id: Long): ResponseEntity<Void> {
+        // Comprobamos si el huerto existe antes de intentar borrarlo
+        return if (huertoRepository.existsById(id)) {
+            huertoRepository.deleteById(id)
+            // 204 No Content: Todo ha ido bien, pero no devuelvo ningún JSON de vuelta
+            ResponseEntity.noContent().build()
+        } else {
+            // 404 Not Found: El huerto no existe en la base de datos
+            ResponseEntity.notFound().build()
+        }
+    }
 }

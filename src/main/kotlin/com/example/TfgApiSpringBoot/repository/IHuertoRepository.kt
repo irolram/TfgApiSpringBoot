@@ -6,4 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface HuertoRepository : JpaRepository<HuertoEntity, String>
+interface HuertoRepository : JpaRepository<HuertoEntity, Long>{
+
+}
+
