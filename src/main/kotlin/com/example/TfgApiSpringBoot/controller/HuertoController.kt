@@ -55,7 +55,7 @@ class HuertoController(private val huertoRepository: HuertoRepository) {
     )
 
     @DeleteMapping("/{id}")
-    fun borrarHuerto(@PathVariable id: Long): ResponseEntity<Void> {
+    fun borrarHuerto(@PathVariable id: String): ResponseEntity<Void> {
         // Comprobamos si el huerto existe antes de intentar borrarlo
         return if (huertoRepository.existsById(id)) {
             huertoRepository.deleteById(id)
