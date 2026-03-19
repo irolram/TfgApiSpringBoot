@@ -36,10 +36,9 @@ class HuertoController(private val huertoRepository: HuertoRepository) {
     @GetMapping
     fun obtenerTodos(): ResponseEntity<List<HuertoDTO>> {
         // 🔍 Opcional: Si solo quieres ver TUS huertos y no los de todo el mundo:
-        // val auth = SecurityContextHolder.getContext().authentication
-        // val listaDTOs = huertoRepository.findByCreadorId(auth.name).map { toDTO(it) }
+        val auth = SecurityContextHolder.getContext().authentication
+        val listaDTOs = huertoRepository.findByCreadorId(auth.name).map { toDTO(it) }
 
-        val listaDTOs = huertoRepository.findAll().map { toDTO(it) }
         return ResponseEntity.ok(listaDTOs)
     }
 

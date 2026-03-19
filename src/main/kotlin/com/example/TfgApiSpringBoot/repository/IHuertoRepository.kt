@@ -8,5 +8,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface HuertoRepository : JpaRepository<HuertoEntity, String>{
 
+    fun findByCreadorId(creadorId: String): List<HuertoEntity>
 }
 
