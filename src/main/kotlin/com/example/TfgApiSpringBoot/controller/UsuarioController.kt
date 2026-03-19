@@ -38,6 +38,7 @@ class UsuarioController(private val IUsuarioRepository: IUsuarioRepository) {
 
             usuario.nombre = usuarioActualizado.nombre
             usuario.email = usuarioActualizado.email
+            usuario.apellidos = usuarioActualizado.apellidos
 
             val usuarioGuardado = IUsuarioRepository.save(usuario)
             ResponseEntity.ok(usuarioGuardado)
