@@ -1,15 +1,19 @@
 package com.example.TfgApiSpringBoot.controller
 
+import com.example.TfgApiSpringBoot.dto.CultivoDTO
 import com.example.TfgApiSpringBoot.dto.HuertoDTO
+import com.example.TfgApiSpringBoot.model.CultivoEntity
 import com.example.TfgApiSpringBoot.model.HuertoEntity
-import com.example.TfgApiSpringBoot.repository.HuertoRepository
+import com.example.TfgApiSpringBoot.repository.ICultivoRepository
+import com.example.TfgApiSpringBoot.repository.IHuertoRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/huertos")
-class HuertoController(private val huertoRepository: HuertoRepository) {
+class HuertoController(private val huertoRepository: IHuertoRepository,
+                       private val cultivoRepository: ICultivoRepository) {
 
     @PostMapping
     fun crearHuerto(
@@ -64,5 +68,26 @@ class HuertoController(private val huertoRepository: HuertoRepository) {
             // 404 Not Found: El huerto no existe en la base de datos
             ResponseEntity.notFound().build()
         }
+    }
+
+    @PostMapping("/{huertoId}/cultivos")
+    fun aniadirCultivo(
+        @PathVariable huertoId: String,
+        @RequestBody dto: CultivoDTO // Usamos tu DTO de la carpeta .dto
+    ): ResponseEntity<Any> {
+
+        // Creamos la entidad usando los datos de tu DTO
+        val nuevoCultivo = CultivoEntity(
+            nombre = dto.nombre,
+            variedad = dto.variedad,
+            estado = dto.estado,
+            fechaPlantacion = dto.fechaPlantacion,
+            icono = dto.icono,
+            huertoId = huertoId // Usamos el ID que viene en la URL
+        )
+
+        cultivoRepository.save(nuevoCultivo)
+
+        return ResponseEntity.ok().build()
     }
 }
