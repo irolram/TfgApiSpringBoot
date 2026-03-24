@@ -90,4 +90,21 @@ class HuertoController(private val huertoRepository: IHuertoRepository,
 
         return ResponseEntity.ok().build()
     }
+    @GetMapping("/{huertoId}/cultivos")
+    fun obtenerCultivosDeUnHuerto(@PathVariable huertoId: String): ResponseEntity<List<CultivoDTO>> {
+
+        val listaCultivos = cultivoRepository.findByHuertoId(huertoId).map { entity ->
+            CultivoDTO(
+                id = entity.id,
+                nombre = entity.nombre,
+                variedad = entity.variedad,
+                estado = entity.estado,
+                fechaPlantacion = entity.fechaPlantacion,
+                icono = entity.icono,
+                huertoId = entity.huertoId
+            )
+        }
+
+        return ResponseEntity.ok(listaCultivos)
+    }
 }
