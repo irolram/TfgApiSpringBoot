@@ -23,8 +23,8 @@ class SecurityConfig(private val jwtAuthenticationFilter:  JwtAuthenticationFilt
             }
             .authorizeHttpRequests { auth ->
                 auth.requestMatchers("/api/auth/**").permitAll()
-                    // 🔌 AÑADE ESTA LÍNEA PARA VER LOS ERRORES REALES
                     .requestMatchers("/error").permitAll()
+                    .requestMatchers("/api/catalogo/**").permitAll()
                     .anyRequest().authenticated()
             }
             // Añadimos nuestro filtro personalizado antes del filtro por defecto de Spring
