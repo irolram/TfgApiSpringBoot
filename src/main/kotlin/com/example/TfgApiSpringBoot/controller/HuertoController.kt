@@ -83,7 +83,9 @@ class HuertoController(private val huertoRepository: IHuertoRepository,
             estado = dto.estado,
             fechaPlantacion = dto.fechaPlantacion,
             icono = dto.icono,
-            huertoId = huertoId // Usamos el ID que viene en la URL
+            huertoId = huertoId,
+            luzSolar = dto.luzSolar,
+            riego = dto.riego
         )
 
         cultivoRepository.save(nuevoCultivo)
