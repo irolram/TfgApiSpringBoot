@@ -24,10 +24,10 @@ class CultivoEntity(
     @Column(length = 1000)
     var icono: String = "",
 
-    //var riego: String? = null,
+    var riego: String? = null,
 
-    //@Column(name = "luz_solar")
-    //var luzSolar: String? = null,
+    @Column(name = "luz_solar")
+    var luzSolar: String? = null,
 
     @Column(name = "huerto_id", nullable = false)
     var huertoId: String = ""

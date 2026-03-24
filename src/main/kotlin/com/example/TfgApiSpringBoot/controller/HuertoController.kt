@@ -101,7 +101,9 @@ class HuertoController(private val huertoRepository: IHuertoRepository,
                 estado = entity.estado,
                 fechaPlantacion = entity.fechaPlantacion,
                 icono = entity.icono,
-                huertoId = entity.huertoId
+                huertoId = entity.huertoId,
+                riego = entity.riego,
+                luzSolar = entity.luzSolar,
             )
         }
 
