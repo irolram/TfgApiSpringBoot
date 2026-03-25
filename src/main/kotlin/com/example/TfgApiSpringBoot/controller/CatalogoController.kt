@@ -3,6 +3,7 @@ package com.example.TfgApiSpringBoot.controller
 
 import com.example.TfgApiSpringBoot.dto.CatalogoDTO
 import com.example.TfgApiSpringBoot.repository.ICatalogoRepository
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController

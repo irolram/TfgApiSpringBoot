@@ -111,4 +111,16 @@ class HuertoController(private val huertoRepository: IHuertoRepository,
 
         return ResponseEntity.ok(listaCultivos)
     }
+    @DeleteMapping("/{huertoId}/cultivos/{cultivoId}")
+    fun eliminarCultivo(
+        @PathVariable huertoId: String,
+        @PathVariable cultivoId: String
+    ): ResponseEntity<Void> {
+        return if (cultivoRepository.existsById(cultivoId)) {
+            cultivoRepository.deleteById(cultivoId)
+            ResponseEntity.noContent().build()
+        } else {
+            ResponseEntity.notFound().build()
+        }
+    }
 }
