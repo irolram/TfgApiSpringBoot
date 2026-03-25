@@ -16,6 +16,7 @@ class SecurityConfig(private val jwtAuthenticationFilter:  JwtAuthenticationFilt
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
+            .cors { it.configure(http) }
             .csrf { it.disable() } // Desactivamos CSRF porque JWT ya nos protege
             .sessionManagement {
                 // Indicamos que no guardamos sesiones en el servidor (Stateless)
@@ -31,5 +32,15 @@ class SecurityConfig(private val jwtAuthenticationFilter:  JwtAuthenticationFilt
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build()
+    }
+    @Bean
+    fun corsConfigurationSource(): org.springframework.web.cors.CorsConfigurationSource {
+        val configuration = org.springframework.web.cors.CorsConfiguration()
+        configuration.allowedOrigins = listOf("*") // En producción pondrías tu dominio, para el TFG "*" vale
+        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        configuration.allowedHeaders = listOf("Authorization", "Content-Type")
+        val source = org.springframework.web.cors.UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration)
+        return source
     }
 }
