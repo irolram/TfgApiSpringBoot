@@ -7,5 +7,10 @@ data class CatalogoDTO(
     val nombreCientifico: String?,
     val riego: String?,
     val luzSolar: String?,
-    val iconoUrl: String?
+    val iconoUrl: String?,
+    val instrucciones: String?,
+    val diasCrecimiento: Int?,
+    val temporadaIdeal: String?,
+    val profundidadSiembra: Int?,
+    val distanciaEntrePlantas: Int?
 )

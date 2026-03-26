@@ -20,7 +20,12 @@ class CatalogoController(private val catalogoRepository: ICatalogoRepository) {
                     nombreCientifico = entity.nombreCientifico,
                     riego = entity.riego,
                     luzSolar = entity.luzSolar,
-                    iconoUrl = entity.iconoUrl
+                    iconoUrl = entity.iconoUrl,
+                    instrucciones = entity.instrucciones,
+                    diasCrecimiento = entity.diasCrecimiento,
+                    temporadaIdeal = entity.temporadaIdeal,
+                    profundidadSiembra = entity.profundidadSiembra,
+                    distanciaEntrePlantas = entity.distanciaEntrePlantas,
                 )
             }
     }

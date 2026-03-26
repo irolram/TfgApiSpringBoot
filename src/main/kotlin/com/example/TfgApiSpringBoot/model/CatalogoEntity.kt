@@ -14,5 +14,12 @@ class CatalogoEntity(
     val nombreCientifico: String? = null,
     val riego: String? = null,
     val luzSolar: String? = null,
-    val iconoUrl: String? = null
+    val iconoUrl: String? = null,
+    @Column(columnDefinition = "TEXT")
+    val instrucciones: String,
+
+    val diasCrecimiento: Int,
+    val temporadaIdeal: String,
+    val profundidadSiembra: Int,
+    val distanciaEntrePlantas: Int
 )
