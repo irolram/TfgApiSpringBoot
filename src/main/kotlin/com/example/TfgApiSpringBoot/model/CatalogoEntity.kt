@@ -4,7 +4,7 @@ package com.example.TfgApiSpringBoot.model
 import jakarta.persistence.*
 
 @Entity
-@Table(name = "catalogo") 
+@Table(name = "catalogo_plantas")
 class CatalogoEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
