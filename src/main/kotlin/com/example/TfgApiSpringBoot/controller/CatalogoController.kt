@@ -9,24 +9,30 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/catalogo")
 class CatalogoController(private val catalogoRepository: ICatalogoRepository) {
-
     @GetMapping("/buscar")
-    fun buscarPlantas(@RequestParam nombre: String): List<CatalogoDTO> {
-        return catalogoRepository.findByNombreContainingIgnoreCase(nombre)
-            .map { entity ->
-                CatalogoDTO(
-                    id = entity.id,
-                    nombre = entity.nombre,
-                    nombreCientifico = entity.nombreCientifico,
-                    riego = entity.riego,
-                    luzSolar = entity.luzSolar,
-                    iconoUrl = entity.iconoUrl,
-                    instrucciones = entity.instrucciones,
-                    diasCrecimiento = entity.diasCrecimiento,
-                    temporadaIdeal = entity.temporadaIdeal,
-                    profundidadSiembra = entity.profundidadSiembra,
-                    distanciaEntrePlantas = entity.distanciaEntrePlantas,
-                )
-            }
+    fun buscarPlantas(@RequestParam nombre: String): ResponseEntity<List<CatalogoDTO>> {
+        val plantas = catalogoRepository.findByNombreContainingIgnoreCase(nombre)
+
+        if (plantas.isEmpty()) {
+            return ResponseEntity.noContent().build()
+        }
+
+        val listaDto = plantas.map { entity ->
+            CatalogoDTO(
+                id = entity.id,
+                nombreCientifico = entity.nombreCientifico,
+                nombre = entity.nombre,
+                instrucciones = entity.instrucciones,
+                temporadaIdeal = entity.temporadaIdeal,
+                profundidadSiembra = entity.profundidadSiembra,
+                distanciaEntrePlantas = entity.distanciaEntrePlantas,
+                icono = entity.icono,
+                riego = entity.riego,
+                luzSolar = entity.luzSolar,
+                diasCrecimiento = entity.diasCrecimiento
+            )
+        }
+
+        return ResponseEntity.ok(listaDto)
     }
 }

@@ -6,8 +6,6 @@ data class CultivoDTO(
     val variedad: String? = null,
     val estado: String = "PLANTADO",
     val fechaPlantacion: Long = System.currentTimeMillis(),
-    val icono: String,
-    val riego: String? = null,
-    val luzSolar: String? = null,
-    val huertoId: String
-)
+    val infoCatalogo: CatalogoDTO?,
+    val huertoId: String,
+    )

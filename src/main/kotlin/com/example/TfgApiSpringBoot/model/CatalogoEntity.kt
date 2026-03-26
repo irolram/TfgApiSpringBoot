@@ -21,7 +21,7 @@ class CatalogoEntity(
     val luzSolar: String? = null,
 
     @Column(name = "icono_url")
-    val iconoUrl: String? = null,
+    val icono: String? = null,
 
     @Column(columnDefinition = "TEXT")
     val instrucciones: String? = null,
