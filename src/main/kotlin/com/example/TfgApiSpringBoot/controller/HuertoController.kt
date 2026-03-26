@@ -1,9 +1,11 @@
 package com.example.TfgApiSpringBoot.controller
 
+import com.example.TfgApiSpringBoot.dto.CatalogoDTO
 import com.example.TfgApiSpringBoot.dto.CultivoDTO
 import com.example.TfgApiSpringBoot.dto.HuertoDTO
 import com.example.TfgApiSpringBoot.model.CultivoEntity
 import com.example.TfgApiSpringBoot.model.HuertoEntity
+import com.example.TfgApiSpringBoot.repository.ICatalogoRepository
 import com.example.TfgApiSpringBoot.repository.ICultivoRepository
 import com.example.TfgApiSpringBoot.repository.IHuertoRepository
 import org.springframework.http.ResponseEntity
@@ -13,7 +15,8 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/huertos")
 class HuertoController(private val huertoRepository: IHuertoRepository,
-                       private val cultivoRepository: ICultivoRepository) {
+                       private val cultivoRepository: ICultivoRepository, private val catalogoRepository: ICatalogoRepository
+) {
 
     @PostMapping
     fun crearHuerto(
@@ -73,39 +76,54 @@ class HuertoController(private val huertoRepository: IHuertoRepository,
     @PostMapping("/{huertoId}/cultivos")
     fun aniadirCultivo(
         @PathVariable huertoId: String,
-        @RequestBody dto: CultivoDTO // Usamos tu DTO de la carpeta .dto
+        @RequestBody dto: CultivoDTO
     ): ResponseEntity<Any> {
-
-        // Creamos la entidad usando los datos de tu DTO
+        // 🚩 IMPORTANTE: Aquí la entidad debe guardar el enlace al catálogo
+        // Si tu Entity aún no tiene 'catalogoId', deberías añadírselo.
         val nuevoCultivo = CultivoEntity(
             nombre = dto.nombre,
             variedad = dto.variedad,
             estado = dto.estado,
             fechaPlantacion = dto.fechaPlantacion,
-            icono = dto.icono,
-            huertoId = huertoId,
-            luzSolar = dto.luzSolar,
-            riego = dto.riego
+            huertoId = huertoId
         )
 
         cultivoRepository.save(nuevoCultivo)
-
         return ResponseEntity.ok().build()
     }
     @GetMapping("/{huertoId}/cultivos")
     fun obtenerCultivosDeUnHuerto(@PathVariable huertoId: String): ResponseEntity<List<CultivoDTO>> {
 
         val listaCultivos = cultivoRepository.findByHuertoId(huertoId).map { entity ->
+
+            // 🔍 BUSQUEDA CRUZADA: Por cada cultivo, buscamos su "manual" en el catálogo
+            val plantaDelCatalogo = entity.catalogoId?.let { id ->
+                catalogoRepository.findById(id).orElse(null)
+            }
+
             CultivoDTO(
                 id = entity.id,
                 nombre = entity.nombre,
                 variedad = entity.variedad,
                 estado = entity.estado,
                 fechaPlantacion = entity.fechaPlantacion,
-                icono = entity.icono,
                 huertoId = entity.huertoId,
-                riego = entity.riego,
-                luzSolar = entity.luzSolar,
+                // 🚩 RELLENAMOS LA INFO TÉCNICA:
+                infoCatalogo = plantaDelCatalogo?.let { cat ->
+                    CatalogoDTO(
+                        id = cat.id,
+                        nombre = cat.nombre,
+                        instrucciones = cat.instrucciones,
+                        diasCrecimiento = cat.diasCrecimiento,
+                        temporadaIdeal = cat.temporadaIdeal,
+                        profundidadSiembra = cat.profundidadSiembra,
+                        distanciaEntrePlantas = cat.distanciaEntrePlantas,
+                        icono = cat.icono, // La URL de la imagen
+                        riego = cat.riego,
+                        luzSolar = cat.luzSolar,
+                        nombreCientifico = cat.nombreCientifico
+                    )
+                }
             )
         }
 

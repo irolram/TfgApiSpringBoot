@@ -21,14 +21,8 @@ class CultivoEntity(
     @Column(name = "fecha_plantacion")
     var fechaPlantacion: Long = System.currentTimeMillis(),
 
-    @Column(length = 1000)
-    var icono: String = "",
-
-    var riego: String? = null,
-
-    @Column(name = "luz_solar")
-    var luzSolar: String? = null,
-
     @Column(name = "huerto_id", nullable = false)
-    var huertoId: String = ""
+    var huertoId: String = "",
+    @Column(name = "catalogo_id")
+    var catalogoId: Long? = null
 )
