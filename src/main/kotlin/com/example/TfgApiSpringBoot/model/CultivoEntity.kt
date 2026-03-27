@@ -13,9 +13,6 @@ class CultivoEntity(
     @Column(nullable = false)
     var nombre: String = "",
 
-    @Column(name = "nombre_cientifico")
-    var nombreCientifico: String = "",
-
     @Column(length = 50)
     var estado: String = "PLANTADO",
 
