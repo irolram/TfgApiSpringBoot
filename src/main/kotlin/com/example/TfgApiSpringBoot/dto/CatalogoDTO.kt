@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class CatalogoDTO(
     val id: Long?,
 
-    @JsonProperty("nombre_cientifico") 
+    @JsonProperty("nombre_cientifico")
     val nombreCientifico: String?,
     val nombre: String?,
     val instrucciones: String?,
