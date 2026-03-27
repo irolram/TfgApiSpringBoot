@@ -82,6 +82,7 @@ class HuertoController(private val huertoRepository: IHuertoRepository,
             nombre = dto.nombre,
             estado = dto.estado,
             fechaPlantacion = dto.fechaPlantacion,
+            catalogoId = dto.infoCatalogo?.id,
             huertoId = huertoId
         )
 
