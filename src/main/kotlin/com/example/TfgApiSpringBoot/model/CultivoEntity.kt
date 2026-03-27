@@ -21,6 +21,6 @@ class CultivoEntity(
 
     @Column(name = "huerto_id", nullable = false)
     var huertoId: String = "",
-    @Column(name = "catalogo_id")
+    @Column(name = "catalogo_info")
     var catalogoId: Long? = null
 )
