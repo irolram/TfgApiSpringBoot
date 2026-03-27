@@ -78,11 +78,8 @@ class HuertoController(private val huertoRepository: IHuertoRepository,
         @PathVariable huertoId: String,
         @RequestBody dto: CultivoDTO
     ): ResponseEntity<Any> {
-        // 🚩 IMPORTANTE: Aquí la entidad debe guardar el enlace al catálogo
-        // Si tu Entity aún no tiene 'catalogoId', deberías añadírselo.
         val nuevoCultivo = CultivoEntity(
             nombre = dto.nombre,
-            variedad = dto.variedad,
             estado = dto.estado,
             fechaPlantacion = dto.fechaPlantacion,
             huertoId = huertoId
@@ -104,24 +101,22 @@ class HuertoController(private val huertoRepository: IHuertoRepository,
             CultivoDTO(
                 id = entity.id,
                 nombre = entity.nombre,
-                variedad = entity.variedad,
                 estado = entity.estado,
                 fechaPlantacion = entity.fechaPlantacion,
                 huertoId = entity.huertoId,
-                // 🚩 RELLENAMOS LA INFO TÉCNICA:
                 infoCatalogo = plantaDelCatalogo?.let { cat ->
                     CatalogoDTO(
                         id = cat.id,
+                        nombreCientifico = cat.nombreCientifico,
                         nombre = cat.nombre,
                         instrucciones = cat.instrucciones,
                         diasCrecimiento = cat.diasCrecimiento,
                         temporadaIdeal = cat.temporadaIdeal,
                         profundidadSiembra = cat.profundidadSiembra,
                         distanciaEntrePlantas = cat.distanciaEntrePlantas,
-                        icono = cat.icono, // La URL de la imagen
+                        icono = cat.icono,
                         riego = cat.riego,
-                        luzSolar = cat.luzSolar,
-                        nombreCientifico = cat.nombreCientifico
+                        luzSolar = cat.luzSolar
                     )
                 }
             )
