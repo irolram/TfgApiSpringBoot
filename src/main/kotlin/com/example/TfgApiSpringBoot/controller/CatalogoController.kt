@@ -3,6 +3,7 @@ package com.example.TfgApiSpringBoot.controller
 
 import com.example.TfgApiSpringBoot.dto.CatalogoDTO
 import com.example.TfgApiSpringBoot.repository.ICatalogoRepository
+import org.hibernate.query.results.Builders.entity
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
@@ -34,5 +35,27 @@ class CatalogoController(private val catalogoRepository: ICatalogoRepository) {
         }
 
         return ResponseEntity.ok(listaDto)
+    }
+
+    @GetMapping
+    fun obtenerTodoElCatalogo(): ResponseEntity<List<CatalogoDTO>> {
+
+        val lista = catalogoRepository.findAll().map { cat ->
+            CatalogoDTO(
+                id = cat.id,
+                nombreCientifico = cat.nombreCientifico,
+                nombre = cat.nombre,
+                instrucciones = cat.instrucciones,
+                temporadaIdeal = cat.temporadaIdeal,
+                profundidadSiembra = cat.profundidadSiembra,
+                distanciaEntrePlantas = cat.distanciaEntrePlantas,
+                icono = cat.icono,
+                riego = cat.riego,
+                luzSolar = cat.luzSolar,
+                diasCrecimiento = cat.diasCrecimiento
+            )
+        }
+        
+        return ResponseEntity.ok(lista)
     }
 }
