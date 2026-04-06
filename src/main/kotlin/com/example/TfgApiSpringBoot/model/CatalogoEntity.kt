@@ -20,9 +20,9 @@ class CatalogoEntity(
     @Column(name = "luz_solar")
     val luzSolar: String? = null,
 
-    @Column(name = "icono_url")
+    @Column(name = "icono_url", columnDefinition = "TEXT")
     val icono: String? = null,
-
+    
     @Column(columnDefinition = "TEXT")
     val instrucciones: String? = null,
 
