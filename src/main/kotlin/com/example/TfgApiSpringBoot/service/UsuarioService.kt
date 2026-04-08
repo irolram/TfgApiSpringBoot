@@ -32,14 +32,16 @@ class UsuarioService(private val usuarioRepository: IUsuarioRepository) {
 
     @Transactional
     fun gestionarCambioDeRol(idObjetivo: String, nuevoRol: Rol, idEjecutor: String) {
-        // 🚩 ARREGLADO: Buscamos al ejecutor por ID (findById), no por email
+
+        if (idObjetivo == idEjecutor && nuevoRol != Rol.ADMIN) {
+            throw IllegalAccessException("No puedes bajarte el rango a ti mismo. El sistema necesita al menos un Administrador activo.")
+        }
         val ejecutor = usuarioRepository.findById(idEjecutor)
             .orElseThrow { Exception("No se encuentra el administrador ejecutor con ID: $idEjecutor") }
 
         val objetivo = usuarioRepository.findById(idObjetivo)
             .orElseThrow { Exception("Usuario a modificar no encontrado") }
 
-        // --- LÓGICA DE JERARQUÍA (Tu regla de negocio) ---
         when (ejecutor.rol) {
             Rol.MOD -> {
                 // El MOD no puede tocar a ADMIN ni a otros MODs
