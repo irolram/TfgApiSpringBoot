@@ -2,6 +2,7 @@ package com.example.TfgApiSpringBoot.security
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -23,9 +24,25 @@ class SecurityConfig(private val jwtAuthenticationFilter:  JwtAuthenticationFilt
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
             .authorizeHttpRequests { auth ->
+                // 1. Rutas públicas
                 auth.requestMatchers("/api/auth/**").permitAll()
                     .requestMatchers("/error").permitAll()
-                    .requestMatchers("/api/catalogo/**").permitAll()
+
+                    // 2. Permisos del Catálogo (Nivel Pro)
+                    // Cualquiera (User, Técnico, Admin) puede VER las plantas
+                    .requestMatchers(HttpMethod.GET, "/api/catalogo/**").permitAll()
+
+                    // SOLO Admin y Técnico pueden CREAR, EDITAR o BORRAR plantas
+                    .requestMatchers(HttpMethod.POST, "/api/catalogo/**").hasAnyRole("ADMIN", "MOD")
+                    .requestMatchers(HttpMethod.PUT, "/api/catalogo/**").hasAnyRole("ADMIN", "MOD")
+                    .requestMatchers(HttpMethod.DELETE, "/api/catalogo/**").hasAnyRole("ADMIN", "MOD")
+
+                    // 3. Permisos de Administración de Usuarios
+                    // SOLO el Admin puede gestionar usuarios o ver logs
+                    .requestMatchers("/api/usuarios/**").hasRole("ADMIN")
+                    .requestMatchers("/api/admin/**").hasRole("ADMIN")
+
+                    // 4. El resto (Huertos, Cultivos personales) requiere estar logueado
                     .anyRequest().authenticated()
             }
             // Añadimos nuestro filtro personalizado antes del filtro por defecto de Spring
@@ -36,7 +53,7 @@ class SecurityConfig(private val jwtAuthenticationFilter:  JwtAuthenticationFilt
     @Bean
     fun corsConfigurationSource(): org.springframework.web.cors.CorsConfigurationSource {
         val configuration = org.springframework.web.cors.CorsConfiguration()
-        configuration.allowedOrigins = listOf("*") // En producción pondrías tu dominio, para el TFG "*" vale
+        configuration.allowedOrigins = listOf("*")
         configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
         configuration.allowedHeaders = listOf("Authorization", "Content-Type")
         val source = org.springframework.web.cors.UrlBasedCorsConfigurationSource()

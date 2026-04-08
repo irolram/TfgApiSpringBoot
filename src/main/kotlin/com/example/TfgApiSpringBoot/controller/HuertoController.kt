@@ -41,8 +41,7 @@ class HuertoController(private val huertoRepository: IHuertoRepository,
     }
 
     @GetMapping
-    fun obtenerTodos(): ResponseEntity<List<HuertoDTO>> {
-        // 🔍 Opcional: Si solo quieres ver TUS huertos y no los de todo el mundo:
+    fun obtenerTodosHuertos(): ResponseEntity<List<HuertoDTO>> {
         val auth = SecurityContextHolder.getContext().authentication
         val listaDTOs = huertoRepository.findByCreadorId(auth.name).map { toDTO(it) }
 
@@ -73,22 +72,6 @@ class HuertoController(private val huertoRepository: IHuertoRepository,
         }
     }
 
-    @PostMapping("/{huertoId}/cultivos")
-    fun aniadirCultivo(
-        @PathVariable huertoId: String,
-        @RequestBody dto: CultivoDTO
-    ): ResponseEntity<Any> {
-        val nuevoCultivo = CultivoEntity(
-            nombre = dto.nombre,
-            estado = dto.estado,
-            fechaPlantacion = dto.fechaPlantacion,
-            catalogoId = dto.infoCatalogo?.id,
-            huertoId = huertoId
-        )
-
-        cultivoRepository.save(nuevoCultivo)
-        return ResponseEntity.ok().build()
-    }
     @GetMapping("/{huertoId}/cultivos")
     fun obtenerCultivosDeUnHuerto(@PathVariable huertoId: String): ResponseEntity<List<CultivoDTO>> {
 
@@ -136,5 +119,22 @@ class HuertoController(private val huertoRepository: IHuertoRepository,
         } else {
             ResponseEntity.notFound().build()
         }
+    }
+
+    @PostMapping("/{huertoId}/cultivos")
+    fun aniadirCultivo(
+        @PathVariable huertoId: String,
+        @RequestBody dto: CultivoDTO
+    ): ResponseEntity<Any> {
+        val nuevoCultivo = CultivoEntity(
+            nombre = dto.nombre,
+            estado = dto.estado,
+            fechaPlantacion = dto.fechaPlantacion,
+            catalogoId = dto.infoCatalogo?.id,
+            huertoId = huertoId
+        )
+
+        cultivoRepository.save(nuevoCultivo)
+        return ResponseEntity.ok().build()
     }
 }

@@ -14,16 +14,6 @@ class UsuarioService(private val IUsuarioRepository: IUsuarioRepository) {
         return IUsuarioRepository.findById(id).orElse(null)
     }
 
-    // Buscar por Email (usando el nuevo método del Repo)
-    fun obtenerPorEmail(email: String): UsuarioEntity? {
-        return IUsuarioRepository.findByEmail(email).orElse(null)
-    }
-
-    // Verificar si el email existe antes de registrar
-    fun existeEmail(email: String): Boolean {
-        return IUsuarioRepository.existsByEmail(email)
-    }
-
     // El método de "Auto-registro" que vimos antes
     @Transactional
     fun asegurarUsuario(userId: String, email: String): UsuarioEntity {
