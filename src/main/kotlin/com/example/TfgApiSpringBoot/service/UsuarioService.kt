@@ -7,18 +7,15 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UsuarioService(private val IUsuarioRepository: IUsuarioRepository) {
+class UsuarioService(private val usuarioRepository: IUsuarioRepository) {
 
-    // Buscar por ID (UID de Firebase)
     fun obtenerPorId(id: String): UsuarioEntity? {
-        return IUsuarioRepository.findById(id).orElse(null)
+        return usuarioRepository.findById(id).orElse(null)
     }
 
-    // El método de "Auto-registro" que vimos antes
     @Transactional
     fun asegurarUsuario(userId: String, email: String): UsuarioEntity {
         val existente = obtenerPorId(userId)
-
         return if (existente != null) {
             existente
         } else {
@@ -29,47 +26,53 @@ class UsuarioService(private val IUsuarioRepository: IUsuarioRepository) {
                 apellidos = "EcoDrop",
                 rol = Rol.USER
             )
-            IUsuarioRepository.save(nuevo)
+            usuarioRepository.save(nuevo)
         }
     }
 
-
     @Transactional
-    fun gestionarCambioDeRol(idObjetivo: String, nuevoRol: Rol, emailEjecutor: String) {
-        // 1. Buscamos al que manda (Ejecutor)
-        val ejecutor = IUsuarioRepository.findByEmail(emailEjecutor)
-            .orElseThrow { Exception("No se encuentra el administrador ejecutor") }
+    fun gestionarCambioDeRol(idObjetivo: String, nuevoRol: Rol, idEjecutor: String) {
+        // 🚩 ARREGLADO: Buscamos al ejecutor por ID (findById), no por email
+        val ejecutor = usuarioRepository.findById(idEjecutor)
+            .orElseThrow { Exception("No se encuentra el administrador ejecutor con ID: $idEjecutor") }
 
-        // 2. Buscamos al que va a recibir el cambio (Objetivo)
-        val objetivo = IUsuarioRepository.findById(idObjetivo)
+        val objetivo = usuarioRepository.findById(idObjetivo)
             .orElseThrow { Exception("Usuario a modificar no encontrado") }
 
-        // --- LÓGICA DE JERARQUÍA ---
-
+        // --- LÓGICA DE JERARQUÍA (Tu regla de negocio) ---
         when (ejecutor.rol) {
             Rol.MOD -> {
-                // REGLA 1: Un MOD no puede tocar a un ADMIN u otro MOD
+                // El MOD no puede tocar a ADMIN ni a otros MODs
                 if (objetivo.rol == Rol.ADMIN || objetivo.rol == Rol.MOD) {
-                    throw IllegalAccessException("Como Moderador no puedes modificar a rangos iguales o superiores")
+                    throw IllegalAccessException("Rango insuficiente para modificar a este usuario")
                 }
 
-                // REGLA 2: Un MOD solo puede subir a USER -> MOD
-                // No puede bajar de MOD -> USER (la regla que me pediste)
+                // El MOD solo puede subir USER -> MOD, nada más
                 if (objetivo.rol == Rol.USER && nuevoRol == Rol.MOD) {
                     objetivo.rol = Rol.MOD
                 } else {
-                    throw IllegalAccessException("Un Moderador no tiene permiso para degradar usuarios o asignar el rango ADMIN")
+                    throw IllegalAccessException("Un Moderador no puede degradar usuarios ni asignar rango ADMIN")
                 }
             }
 
             Rol.ADMIN -> {
+                // El ADMIN tiene control total
                 objetivo.rol = nuevoRol
             }
 
             else -> throw IllegalAccessException("No tienes permisos de gestión")
         }
 
-        // Guardamos los cambios
-        IUsuarioRepository.save(objetivo)
+        usuarioRepository.save(objetivo)
+    }
+
+    fun asegurarListaCompleta(): List<UsuarioEntity> {
+
+        return usuarioRepository.findAll()
+    }
+
+    @Transactional
+    fun actualizar(usuario: UsuarioEntity): UsuarioEntity {
+        return usuarioRepository.save(usuario)
     }
 }

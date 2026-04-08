@@ -29,4 +29,6 @@ interface IUsuarioRepository : JpaRepository<UsuarioEntity, String> {
 
     // 5. Contar cuántos usuarios hay registrados (para estadísticas del TFG)
     override fun count(): Long
+
+
 }

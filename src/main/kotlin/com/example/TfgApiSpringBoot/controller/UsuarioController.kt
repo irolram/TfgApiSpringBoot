@@ -2,7 +2,6 @@ package com.example.TfgApiSpringBoot.controller
 
 import com.example.TfgApiSpringBoot.model.Rol
 import com.example.TfgApiSpringBoot.model.UsuarioEntity
-import com.example.TfgApiSpringBoot.repository.IUsuarioRepository
 import com.example.TfgApiSpringBoot.service.UsuarioService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -11,61 +10,52 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/usuarios")
-class UsuarioController(
-    private val usuarioRepository: IUsuarioRepository,
-    private val usuarioService: UsuarioService
-) {
+class UsuarioController(private val usuarioService: UsuarioService) {
 
-    @PostMapping
-    fun registrarUsuario(@RequestBody usuario: UsuarioEntity): UsuarioEntity {
-        return usuarioRepository.save(usuario)
-    }
-
-    @GetMapping("/{id}")
-    fun obtenerUsuario(@PathVariable id: String): UsuarioEntity? {
-        return usuarioRepository.findById(id).orElse(null)
-    }
-
+    // Listar todos (Para el panel de Admin/Mod)
     @GetMapping
     fun listarUsuarios(): List<UsuarioEntity> {
-        return usuarioRepository.findAll()
+        // Podrías crear un método en el service, pero para un findAll simple esto vale
+        return usuarioService.asegurarListaCompleta()
     }
 
+    // Obtener perfil propio o de otro
+    @GetMapping("/{id}")
+    fun obtenerUsuario(@PathVariable id: String): ResponseEntity<UsuarioEntity> {
+        val usuario = usuarioService.obtenerPorId(id)
+        return if (usuario != null) ResponseEntity.ok(usuario) else ResponseEntity.notFound().build()
+    }
+
+    // Actualizar datos básicos (Nombre, Apellidos)
     @PutMapping("/{uid}")
     fun actualizarUsuario(
         @PathVariable uid: String,
-        @RequestBody usuarioActualizado: UsuarioEntity
+        @RequestBody datosActualizados: UsuarioEntity
     ): ResponseEntity<UsuarioEntity> {
-        val usuarioExistente = usuarioRepository.findById(uid)
+        // Lo ideal sería pasar esta lógica también al Service
+        val usuario = usuarioService.obtenerPorId(uid) ?: return ResponseEntity.notFound().build()
 
-        return if (usuarioExistente.isPresent) {
-            val usuario = usuarioExistente.get()
-            usuario.nombre = usuarioActualizado.nombre
-            usuario.email = usuarioActualizado.email
-            usuario.apellidos = usuarioActualizado.apellidos
+        usuario.nombre = datosActualizados.nombre
+        usuario.apellidos = datosActualizados.apellidos
+        // No dejamos cambiar el email ni el rol por aquí por seguridad
 
-            val usuarioGuardado = usuarioRepository.save(usuario)
-            ResponseEntity.ok(usuarioGuardado)
-        } else {
-            ResponseEntity.notFound().build()
-        }
+        return ResponseEntity.ok(usuarioService.actualizar(usuario))
     }
 
+    // El endpoint de la discordia: Gestión de Roles
     @PutMapping("/{id}/rol")
     fun actualizarRol(
         @PathVariable id: String,
         @RequestParam nuevoRol: Rol,
-        authentication: Authentication // Spring Security nos da el email de quien pulsa el botón
+        authentication: Authentication
     ): ResponseEntity<String> {
         return try {
-            // Llamamos al servicio que tiene la lógica de Admin vs Mod
+            // authentication.name nos da el UID del usuario logueado
             usuarioService.gestionarCambioDeRol(id, nuevoRol, authentication.name)
             ResponseEntity.ok("Rol actualizado correctamente")
         } catch (e: IllegalAccessException) {
-            // Si el Mod intenta bajar a alguien, lanzamos un 403 (Prohibido)
             ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.message)
         } catch (e: Exception) {
-            // Cualquier otro error (ej: usuario no encontrado)
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.message)
         }
     }
