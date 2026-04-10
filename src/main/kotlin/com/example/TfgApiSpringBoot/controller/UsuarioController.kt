@@ -21,7 +21,8 @@ class UsuarioController(private val usuarioService: UsuarioService) {
 
     // Obtener perfil propio o de otro
     @GetMapping("/{id}")
-    fun obtenerUsuario(@PathVariable id: String): ResponseEntity<UsuarioEntity> {
+    fun obtenerUsuario(@PathVariable id: String,authentication: Authentication): ResponseEntity<UsuarioEntity> {
+        println("Usuario: ${authentication.name} | Roles: ${authentication.authorities}")
         val usuario = usuarioService.obtenerPorId(id)
         return if (usuario != null) ResponseEntity.ok(usuario) else ResponseEntity.notFound().build()
     }
