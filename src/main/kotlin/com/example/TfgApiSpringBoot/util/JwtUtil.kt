@@ -25,11 +25,9 @@ class JwtUtil {
     }
 
     fun generateToken(userId: String, rol: String): String {
-        val claims = mapOf("rol" to rol)
-
         return Jwts.builder()
-            .setClaims(claims)
             .setSubject(userId)
+            .claim("rol", rol)
             .setIssuedAt(Date())
             .setExpiration(Date(System.currentTimeMillis() + expirationTime))
             .signWith(getSigningKey(), SignatureAlgorithm.HS256)

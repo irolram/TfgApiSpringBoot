@@ -27,8 +27,8 @@ class JwtAuthenticationFilter(private val jwtUtil: JwtUtil) : OncePerRequestFilt
                     val userId = jwtUtil.extractUserId(token)
                     val role = jwtUtil.extractRole(token)
 
-                    val authorities = listOf(SimpleGrantedAuthority("ROLE_$role"))
-
+                    println("DEBUG SECURITY: Intentando acceder Usuario: $userId con ROL: $role")
+                    val authorities = listOf(SimpleGrantedAuthority("ROLE_${role.uppercase()}"))
                     val authToken = UsernamePasswordAuthenticationToken(userId, null, authorities)
 
                     SecurityContextHolder.getContext().authentication = authToken
