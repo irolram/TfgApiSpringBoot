@@ -1,6 +1,6 @@
 package com.example.TfgApiSpringBoot.dto
 
-data class StatsDashboardDTO(
+data class StatDashboardDTO(
     val totalUsuarios: Long,
     val totalHuertos: Long,
     val totalPlantas: Long,
