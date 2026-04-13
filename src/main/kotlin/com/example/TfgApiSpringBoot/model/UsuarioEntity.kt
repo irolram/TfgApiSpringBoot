@@ -18,5 +18,8 @@ class UsuarioEntity(
     var email: String = "",
 
     @Enumerated(EnumType.STRING)
-    var rol: Rol = Rol.USER
+    var rol: Rol = Rol.USER,
+
+    @OneToMany(mappedBy = "usuario", cascade = [CascadeType.ALL], orphanRemoval = true)
+    val huertos: List<HuertoEntity> = mutableListOf()
 )

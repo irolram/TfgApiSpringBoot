@@ -2,7 +2,9 @@ package com.example.TfgApiSpringBoot.repository
 
 
 import com.example.TfgApiSpringBoot.model.HuertoEntity
+import jakarta.transaction.Transactional
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
@@ -21,5 +23,10 @@ interface IHuertoRepository : JpaRepository<HuertoEntity, String>{
         @Param("lng") lng: Double,
         @Param("radio") radio: Double
     ): Long
+
+
+    @Modifying
+    @Transactional
+    fun deleteByCreadorId(creadorId: String)
 }
 

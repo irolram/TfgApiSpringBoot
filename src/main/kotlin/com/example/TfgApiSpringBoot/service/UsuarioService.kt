@@ -2,12 +2,13 @@ package com.example.TfgApiSpringBoot.service
 
 import com.example.TfgApiSpringBoot.model.Rol
 import com.example.TfgApiSpringBoot.model.UsuarioEntity
+import com.example.TfgApiSpringBoot.repository.IHuertoRepository
 import com.example.TfgApiSpringBoot.repository.IUsuarioRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class UsuarioService(private val usuarioRepository: IUsuarioRepository) {
+class UsuarioService(private val usuarioRepository: IUsuarioRepository,private val huertoRepository: IHuertoRepository) {
 
     fun obtenerPorId(id: String): UsuarioEntity? {
         return usuarioRepository.findById(id).orElse(null)
@@ -80,6 +81,10 @@ class UsuarioService(private val usuarioRepository: IUsuarioRepository) {
 
     @Transactional
     fun deleteById(id: String) {
+        // 1. Buscamos y borramos todos los huertos que pertenezcan a este ID de usuario
+        huertoRepository.deleteByCreadorId(id)
+
+        // 2. Ahora que no tiene "hijos", ya podemos borrar al usuario sin errores
         usuarioRepository.deleteById(id)
     }
 
