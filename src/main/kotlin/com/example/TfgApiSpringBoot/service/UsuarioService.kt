@@ -77,4 +77,10 @@ class UsuarioService(private val usuarioRepository: IUsuarioRepository) {
     fun actualizar(usuario: UsuarioEntity): UsuarioEntity {
         return usuarioRepository.save(usuario)
     }
+
+    @Transactional
+    fun deleteById(id: String) {
+        usuarioRepository.deleteById(id)
+    }
+
 }

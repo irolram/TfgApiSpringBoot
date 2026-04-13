@@ -2,6 +2,7 @@ package com.example.TfgApiSpringBoot.controller
 
 import com.example.TfgApiSpringBoot.model.Rol
 import com.example.TfgApiSpringBoot.model.UsuarioEntity
+import com.example.TfgApiSpringBoot.repository.IUsuarioRepository
 import com.example.TfgApiSpringBoot.service.UsuarioService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -58,6 +59,24 @@ class UsuarioController(private val usuarioService: UsuarioService) {
             ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.message)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.message)
+        }
+    }
+    @DeleteMapping("/{id}")
+    fun eliminarUsuario(@PathVariable id: String): ResponseEntity<Any> {
+        return try {
+            // 1. Buscamos si existe
+            if (usuarioService.obtenerPorId(id) == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado")
+            }else {
+                usuarioService.deleteById(id)
+                ResponseEntity.ok().body("Usuario eliminado correctamente")
+            }
+
+            ResponseEntity.ok().body("Usuario eliminado correctamente")
+        } catch (e: Exception) {
+            // Si falla por integridad referencial (tiene huertos), saltará aquí
+            ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("No se pudo eliminar: El usuario tiene datos asociados (huertos/plantas).")
         }
     }
 }
