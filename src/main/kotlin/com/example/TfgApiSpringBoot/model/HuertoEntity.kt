@@ -1,6 +1,7 @@
 package com.example.TfgApiSpringBoot.model
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 
 @Entity
@@ -16,5 +17,9 @@ class HuertoEntity(
     var longitud: Double = 0.0,
     var imagenUrl: String = "",
     val fechaCreacion: Long = System.currentTimeMillis(),
-    var creadorId: String = ""
+    var creadorId: String = "",
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    @JsonBackReference // 🚩 "Yo no vuelvo a pintar al usuario para no crear un bucle"
+    val usuario: UsuarioEntity? = null
 )
