@@ -1,5 +1,6 @@
 package com.example.TfgApiSpringBoot.model
 
+import com.fasterxml.jackson.annotation.JsonBackReference
 import com.fasterxml.jackson.annotation.JsonManagedReference
 import jakarta.persistence.*
 
@@ -21,7 +22,8 @@ class UsuarioEntity(
     @Enumerated(EnumType.STRING)
     var rol: Rol = Rol.USER,
 
-    @OneToMany(mappedBy = "usuario", cascade = [CascadeType.ALL], orphanRemoval = true)
-    @JsonManagedReference // 🚩 "Yo soy el dueño de la relación"
-    val huertos: List<HuertoEntity> = mutableListOf()
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    @JsonBackReference 
+    val usuario: UsuarioEntity? = null
 )
