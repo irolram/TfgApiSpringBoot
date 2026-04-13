@@ -18,8 +18,5 @@ class HuertoEntity(
     var imagenUrl: String = "",
     val fechaCreacion: Long = System.currentTimeMillis(),
     var creadorId: String = "",
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    @JsonBackReference // 🚩 "Yo no vuelvo a pintar al usuario para no crear un bucle"
-    val usuario: UsuarioEntity? = null
+
 )
