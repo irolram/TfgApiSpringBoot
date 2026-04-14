@@ -24,6 +24,6 @@ class UsuarioEntity(
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    @JsonBackReference 
+    @JsonBackReference
     val usuario: UsuarioEntity? = null
 )

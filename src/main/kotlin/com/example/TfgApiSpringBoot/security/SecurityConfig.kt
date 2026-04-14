@@ -41,8 +41,7 @@ class SecurityConfig(private val jwtAuthenticationFilter:  JwtAuthenticationFilt
                     // SOLO el Admin puede gestionar usuarios o ver logs
                     auth.requestMatchers(HttpMethod.GET, "/api/usuarios/{id}").authenticated()
                     auth.requestMatchers(HttpMethod.PUT, "/api/usuarios/{id}").authenticated()
-
-                    auth.requestMatchers("/api/usuarios/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/usuarios/**").hasAnyRole("ADMIN", "MOD")
 
                     // 4. El resto (Huertos, Cultivos personales) requiere estar logueado
                     .anyRequest().authenticated()
