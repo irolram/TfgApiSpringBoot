@@ -19,7 +19,7 @@ class TicketController(private val ticketRepository: ITicketRepository) {
     // 2. MOD/ADMIN: Listar solo los tickets abiertos
     @GetMapping
     fun listarTicketsPendientes(): List<TicketEntity> {
-        return ticketRepository.findByEstadoOrderByFechaCreacionDesc(EstadoTicket.ABIERTO)
+        return ticketRepository.findByEstadoOrderByFechaDesc(EstadoTicket.ABIERTO)
     }
 
     // 3. MOD/ADMIN: Resolver (Cerrar) un ticket

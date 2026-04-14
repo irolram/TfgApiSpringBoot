@@ -20,6 +20,6 @@ class HuertoEntity(
     var creadorId: String = "",
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
-    @JsonBackReference 
+    @JsonBackReference
     val usuario: UsuarioEntity? = null
 )

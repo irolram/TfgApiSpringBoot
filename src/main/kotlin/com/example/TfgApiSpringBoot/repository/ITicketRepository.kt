@@ -7,9 +7,7 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface ITicketRepository : JpaRepository<TicketEntity, String> {
-    // Para que el MOD vea los tickets más nuevos primero
-    fun findByEstadoOrderByFechaCreacionDesc(estado: EstadoTicket): List<TicketEntity>
+    fun findByEstadoOrderByFechaDesc(estado: EstadoTicket): List<TicketEntity>
 
-    // Por si quieres que un usuario vea sus propios tickets enviados
     fun findByUsuarioId(usuarioId: String): List<TicketEntity>
 }
