@@ -11,7 +11,7 @@ enum class EstadoTicket { ABIERTO, CERRADO }
 class TicketEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    val id: String? = null,
+    var id: String? = null,
 
     var asunto: String = "",
 
@@ -24,7 +24,7 @@ class TicketEntity(
     @Enumerated(EnumType.STRING)
     var estado: EstadoTicket = EstadoTicket.ABIERTO,
 
-    val fechaCreacion: LocalDateTime = LocalDateTime.now(),
+    val fecha: LocalDateTime = LocalDateTime.now(),
 
     // Solo guardamos el ID del usuario para mantener la DB limpia
     var usuarioId: String = "",
