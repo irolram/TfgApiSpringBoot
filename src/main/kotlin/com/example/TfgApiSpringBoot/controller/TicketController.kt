@@ -13,7 +13,8 @@ class TicketController(private val ticketRepository: ITicketRepository) {
     // 1. USUARIO: Enviar un nuevo ticket
     @PostMapping
     fun crearTicket(@RequestBody ticket: TicketEntity): ResponseEntity<TicketEntity> {
-        return ResponseEntity.ok(ticketRepository.save(ticket))
+        val guardado = ticketRepository.save(ticket)
+        return ResponseEntity.ok(guardado) 
     }
 
     // 2. MOD/ADMIN: Listar solo los tickets abiertos
