@@ -47,7 +47,7 @@ class SecurityConfig(private val jwtAuthenticationFilter: JwtAuthenticationFilte
                 // Luego lo general (listar todos los usuarios para el panel)
                 auth.requestMatchers(HttpMethod.GET, "/api/usuarios/**").hasAnyRole("ADMIN", "MOD")
                 auth.requestMatchers(HttpMethod.PUT, "/api/usuarios/{id}/rol").hasAnyRole("ADMIN", "MOD")
-
+                auth.requestMatchers("/api/huertos/**").hasAnyRole("USER", "MOD", "ADMIN")
                 // 5. EL COMODÍN FINAL (Cualquier otra cosa como Huertos o Cultivos)
                 // 🚩 SIEMPRE al final del bloque
                 auth.anyRequest().authenticated()
