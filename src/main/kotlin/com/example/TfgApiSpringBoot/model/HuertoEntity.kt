@@ -18,7 +18,7 @@ class HuertoEntity(
     var imagenUrl: String = "",
     val fechaCreacion: Long = System.currentTimeMillis(),
     var creadorId: String = "",
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "usuario_id")
     @JsonBackReference
     val usuario: UsuarioEntity? = null
