@@ -45,6 +45,7 @@ class SecurityConfig(private val jwtAuthenticationFilter:  JwtAuthenticationFilt
 
                     // 4. El resto (Huertos, Cultivos personales) requiere estar logueado
                     .anyRequest().authenticated()
+                    .requestMatchers(HttpMethod.POST, "/api/tickets/**").hasAnyRole("USER", "MOD", "ADMIN")
             }
             // Añadimos nuestro filtro personalizado antes del filtro por defecto de Spring
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
