@@ -23,7 +23,7 @@ class TicketController(private val ticketRepository: ITicketRepository) {
         return ticketRepository.findByEstadoOrderByFechaDesc(EstadoTicket.ABIERTO)
     }
 
-    @PutMapping("/{id}") 
+    @PatchMapping("/{id}/resolver")
     fun resolverTicket(@PathVariable id: String): ResponseEntity<TicketEntity> {
         val ticket = ticketRepository.findById(id).orElseThrow { Exception("Ticket no encontrado") }
 
