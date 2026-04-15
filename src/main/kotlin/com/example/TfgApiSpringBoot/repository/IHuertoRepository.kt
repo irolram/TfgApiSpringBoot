@@ -16,7 +16,7 @@ interface IHuertoRepository : JpaRepository<HuertoEntity, String>{
 
     @Query(value = """
         SELECT COUNT(*) FROM huertos h 
-        WHERE (6371 * acos(cos(radians(:lat)) * cos(radians(h.latitud)) * cos(radians(h.longitud) - radians(:lng)) + sin(radians(:lat)) * sin(radians(h.latitud)))) <= :radio
+        WHERE (6371000 * acos(cos(radians(:lat)) * cos(radians(h.latitud)) * cos(radians(h.longitud) - radians(:lng)) + sin(radians(:lat)) * sin(radians(h.latitud)))) <= :radio
     """, nativeQuery = true)
     fun contarHuertosEnRadio(
         @Param("lat") lat: Double,
