@@ -10,9 +10,7 @@ import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 
 @Repository
-interface IHuertoRepository : JpaRepository<HuertoEntity, String>{
-
-    fun findByCreadorId(creadorId: String): List<HuertoEntity>
+interface IHuertoRepository : JpaRepository<HuertoEntity, String> {
 
     @Query(value = """
         SELECT COUNT(*) FROM huertos h 
@@ -24,6 +22,8 @@ interface IHuertoRepository : JpaRepository<HuertoEntity, String>{
         @Param("radio") radio: Double
     ): Long
 
+
+    fun findByCreadorId(creadorId: String): List<HuertoEntity>
 
     @Modifying
     @Transactional
