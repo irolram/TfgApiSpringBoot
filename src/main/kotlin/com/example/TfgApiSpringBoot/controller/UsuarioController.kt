@@ -79,4 +79,6 @@ class UsuarioController(private val usuarioService: UsuarioService) {
                 .body("No se pudo eliminar: El usuario tiene datos asociados (huertos/plantas).")
         }
     }
+
+
 }
