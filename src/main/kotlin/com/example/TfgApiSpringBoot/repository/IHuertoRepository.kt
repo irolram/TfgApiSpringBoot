@@ -10,11 +10,13 @@ import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 
 @Repository
-interface IHuertoRepository : JpaRepository<HuertoEntity, String> {
+interface IHuertoRepository : JpaRepository<HuertoEntity, String>{
+
+    fun findByCreadorId(creadorId: String): List<HuertoEntity>
 
     @Query(value = """
         SELECT COUNT(*) FROM huertos h 
-        WHERE (6371000 * acos(cos(radians(:lat)) * cos(radians(h.latitud)) * cos(radians(h.longitud) - radians(:lng)) + sin(radians(:lat)) * sin(radians(h.latitud)))) <= :radio
+        WHERE (6371 * acos(cos(radians(:lat)) * cos(radians(h.latitud)) * cos(radians(h.longitud) - radians(:lng)) + sin(radians(:lat)) * sin(radians(h.latitud)))) <= :radio
     """, nativeQuery = true)
     fun contarHuertosEnRadio(
         @Param("lat") lat: Double,
@@ -22,8 +24,6 @@ interface IHuertoRepository : JpaRepository<HuertoEntity, String> {
         @Param("radio") radio: Double
     ): Long
 
-
-    fun findByCreadorId(creadorId: String): List<HuertoEntity>
 
     @Modifying
     @Transactional
