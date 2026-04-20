@@ -11,4 +11,5 @@ data class CultivoDTO(
     @JsonProperty("catalogo_info")
     val infoCatalogo: CatalogoDTO?,
     val huertoId: String,
+    val apodo: String
     )
