@@ -88,6 +88,7 @@ class HuertoController(private val huertoRepository: IHuertoRepository,
                 estado = entity.estado,
                 fechaPlantacion = entity.fechaPlantacion,
                 huertoId = entity.huertoId,
+                apodo = entity.apodo,
                 infoCatalogo = plantaDelCatalogo?.let { cat ->
                     CatalogoDTO(
                         id = cat.id,
@@ -100,7 +101,7 @@ class HuertoController(private val huertoRepository: IHuertoRepository,
                         distanciaEntrePlantas = cat.distanciaEntrePlantas,
                         icono = cat.icono,
                         riego = cat.riego,
-                        luzSolar = cat.luzSolar
+                        luzSolar = cat.luzSolar,
                     )
                 }
             )
@@ -131,7 +132,8 @@ class HuertoController(private val huertoRepository: IHuertoRepository,
             estado = dto.estado,
             fechaPlantacion = dto.fechaPlantacion,
             catalogoId = dto.infoCatalogo?.id,
-            huertoId = huertoId
+            huertoId = huertoId,
+            apodo = dto.apodo
         )
 
         cultivoRepository.save(nuevoCultivo)
