@@ -15,10 +15,13 @@ class CatalogoEntity(
     @Column(name = "nombre_cientifico")
     val nombreCientifico: String? = null,
 
-    val riego: String? = null,
+    @Column(name = "riego")
+    @Enumerated(EnumType.STRING)
+    val riego: Riego? = null,
 
-    @Column(name = "luz_solar")
-    val luzSolar: String? = null,
+    @Column(name = "luz_Solar")
+    @Enumerated(EnumType.STRING)
+    val luzSolar: LuzSolar? = null,
 
     @Column(name = "icono_url", columnDefinition = "TEXT")
     val icono: String? = null,
